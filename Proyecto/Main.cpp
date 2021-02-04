@@ -289,8 +289,14 @@ int main()
 	Model orange((char*)"Models/Orange/orange.obj");
 	Model signFloor((char*)"Models/SignFloor/SignFloor.obj");
 
-	//ModelAnim animacionPersonaje("AnimatedModels/Leonard.fbx");
-	//animacionPersonaje.initShaders(animShader.Program);
+	ModelAnim femaleNurse("AnimatedModels/FemaleNurse.fbx");
+	femaleNurse.initShaders(animShader.Program);
+
+	ModelAnim maleNurse("AnimatedModels/MaleNurse.fbx");
+	maleNurse.initShaders(animShader.Program);
+
+	ModelAnim pacient("AnimatedModels/Pacient.fbx");
+	pacient.initShaders(animShader.Program);
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
@@ -1135,7 +1141,7 @@ int main()
 		glBindVertexArray(0);
 
 		/*_______________________________Personaje Animado___________________________*/
-		/*animShader.Use();
+		animShader.Use();
 		modelLoc = glGetUniformLocation(animShader.Program, "model");
 		viewLoc = glGetUniformLocation(animShader.Program, "view");
 		projLoc = glGetUniformLocation(animShader.Program, "projection");
@@ -1153,11 +1159,26 @@ int main()
 		glBindVertexArray(VAO);
 
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-6.5f, 0.0f, 94.6f));
-		model = glm::scale(model, glm::vec3(0.0125f));	// it's a bit too big for our scene, so scale it down
+		model = glm::translate(model, glm::vec3(-5.7f, 0.0f, 94.6f));
+		model = glm::scale(model, glm::vec3(0.0135f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
-		animacionPersonaje.Draw(animShader);
-		glBindVertexArray(0);*/
+		femaleNurse.Draw(animShader);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(-5.7f, 0.0f, 96.6f));
+		model = glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(0.0135f));	// it's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		maleNurse.Draw(animShader);
+		glBindVertexArray(0);
+
+		model = glm::mat4(1);
+		model = glm::translate(model, glm::vec3(0.329385f, 0.05f, 87.5523f));
+		model = glm::scale(model, glm::vec3(0.0155f));	// it's a bit too big for our scene, so scale it down
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		pacient.Draw(animShader);
+		glBindVertexArray(0);
 
 		// Draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
