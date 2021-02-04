@@ -1133,7 +1133,7 @@ int main()
 		glBindVertexArray(VAO);
 
 		model = glm::mat4(1);
-		model = glm::translate(model, glm::vec3(-7.5f, 0.0f, 94.6f));
+		model = glm::translate(model, glm::vec3(-6.5f, 0.0f, 94.6f));
 		model = glm::scale(model, glm::vec3(0.0125f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		animacionPersonaje.Draw(animShader);
