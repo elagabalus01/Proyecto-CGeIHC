@@ -288,8 +288,8 @@ int main()
 	Model trashcan((char*)"Models/Trashcan/Trashcan.obj");
 	Model orange((char*)"Models/Orange/orange.obj");
 
-	//ModelAnim animacionPersonaje("AnimatedModels/Leonard.fbx");
-	//animacionPersonaje.initShaders(animShader.Program);
+	ModelAnim animacionPersonaje("AnimatedModels/Leonard.fbx");
+	animacionPersonaje.initShaders(animShader.Program);
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
@@ -1115,7 +1115,7 @@ int main()
 		glBindVertexArray(0);
 
 		/*_______________________________Personaje Animado___________________________*/
-		/*animShader.Use();
+		animShader.Use();
 		modelLoc = glGetUniformLocation(animShader.Program, "model");
 		viewLoc = glGetUniformLocation(animShader.Program, "view");
 		projLoc = glGetUniformLocation(animShader.Program, "projection");
@@ -1137,7 +1137,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.0125f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		animacionPersonaje.Draw(animShader);
-		glBindVertexArray(0);*/
+		glBindVertexArray(0);
 
 		// Draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
