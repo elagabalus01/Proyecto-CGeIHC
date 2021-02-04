@@ -287,9 +287,10 @@ int main()
 	Model tablet((char*)"Models/Tablet/Tablet.obj");
 	Model trashcan((char*)"Models/Trashcan/Trashcan.obj");
 	Model orange((char*)"Models/Orange/orange.obj");
+	Model signFloor((char*)"Models/SignFloor/SignFloor.obj");
 
-	ModelAnim animacionPersonaje("AnimatedModels/Leonard.fbx");
-	animacionPersonaje.initShaders(animShader.Program);
+	//ModelAnim animacionPersonaje("AnimatedModels/Leonard.fbx");
+	//animacionPersonaje.initShaders(animShader.Program);
 
 	// Set up vertex data (and buffer(s)) and attribute pointers
 	GLfloat vertices[] =
@@ -1079,6 +1080,25 @@ int main()
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		orange.Draw(lightingShader);
 
+		// Floor Signs
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(7.0f, 0.0f, 64.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		signFloor.Draw(lightingShader);
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-7.0f, 0.0f, 64.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		signFloor.Draw(lightingShader);
+
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 54.0f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		signFloor.Draw(lightingShader);
+
 		// Draw transparent objects from furthest to nearest
 		for (std::map<float, glm::vec4>::reverse_iterator it = sorted.rbegin(); it != sorted.rend(); ++it)
 		{
@@ -1115,7 +1135,7 @@ int main()
 		glBindVertexArray(0);
 
 		/*_______________________________Personaje Animado___________________________*/
-		animShader.Use();
+		/*animShader.Use();
 		modelLoc = glGetUniformLocation(animShader.Program, "model");
 		viewLoc = glGetUniformLocation(animShader.Program, "view");
 		projLoc = glGetUniformLocation(animShader.Program, "projection");
@@ -1123,12 +1143,12 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glUniform3f(glGetUniformLocation(animShader.Program, "material.specular"), 0.5f, 0.5f, 0.5f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
 		glUniform1f(glGetUniformLocation(animShader.Program, "material.shininess"), 32.0f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.ambient"), 1.0f, 1.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.diffuse"), 1.0f, 1.0f, 1.0f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.specular"), 0.5f, 0.5f, 0.5f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.direction"), 0.0f, -1.0f, -1.0f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.ambient"), 0.611f, 0.603f, 0.588f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.diffuse"), 0.611f, 0.603f, 0.588f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.specular"), 0.2f, 0.2f, 0.2f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.direction"), -0.4f, -0.7f, -0.8f);
 		view = camera.GetViewMatrix();
 		glBindVertexArray(VAO);
 
@@ -1137,7 +1157,7 @@ int main()
 		model = glm::scale(model, glm::vec3(0.0125f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		animacionPersonaje.Draw(animShader);
-		glBindVertexArray(0);
+		glBindVertexArray(0);*/
 
 		// Draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // Change depth function so depth test passes when values are equal to depth buffer's content
