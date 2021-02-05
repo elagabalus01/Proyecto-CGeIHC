@@ -1155,6 +1155,8 @@ int main()
 		glUniform3f(glGetUniformLocation(animShader.Program, "light.diffuse"), 0.611f, 0.603f, 0.588f);
 		glUniform3f(glGetUniformLocation(animShader.Program, "light.specular"), 0.2f, 0.2f, 0.2f);
 		glUniform3f(glGetUniformLocation(animShader.Program, "light.direction"), -0.4f, -0.7f, -0.8f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "viewPos"),
+			camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
 		view = camera.GetViewMatrix();
 		glBindVertexArray(VAO);
 
