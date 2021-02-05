@@ -100,9 +100,16 @@ public:
                 number = std::to_string(diffuseNr++);
             else if(name == "texture_specular")
                 number = std::to_string(specularNr++); // transfer unsigned int to stream
-            else if(name == "texture_normal")
+            else if (name == "texture_normal")
+            {
                 number = std::to_string(normalNr++); // transfer unsigned int to stream
+<<<<<<< HEAD
             else if(name == "texture_height")
+=======
+                glUniform1i(glGetUniformLocation(shader.Program, "normalFlag"), 1);
+            }
+             else if(name == "texture_height")
+>>>>>>> 6cdf3ced09fb31aa37645b6920223cab861b85ba
                 number = std::to_string(heightNr++); // transfer unsigned int to stream
 
             // now set the sampler to the correct texture unit

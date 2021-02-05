@@ -62,6 +62,10 @@ glm::vec3 pointLightPositions[] = {
 
 glm::vec3 LightP1;
 
+// Camera handling
+bool freeCam = true;
+bool staticCam = false;
+
 // Hanging lamps animation
 float lampsRot = 0.0f;
 bool lampsAnim = false;
@@ -571,9 +575,15 @@ int main()
 		DoMovement();
 		animation();
 
-		if (fastFlag)
+		if (!fastFlag)
 		{
 			fast = 1.0f;
+		}
+
+		if (staticCam)
+		{
+			camera.SetPosition(glm::vec3(0.669385f, 1.44f, 88.1523f));
+			camera.SetDirection(-180.0f, 0.0f);
 		}
 
 		// Sort transparent objects according to distance to camera
@@ -1141,7 +1151,26 @@ int main()
 		glBindVertexArray(0);
 
 		/*_______________________________Personaje Animado___________________________*/
+
 		animShader.Use();
+
+		GLint viewPosLocAnim = glGetUniformLocation(animShader.Program, "viewPos");
+		glUniform3f(viewPosLocAnim, camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+		animShader.setVec3("lightPos", lightPos);
+
+		glUniform1f(glGetUniformLocation(animShader.Program, "material.shininess"), 32.0f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.ambient"), 0.611f, 0.603f, 0.588f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.diffuse"), 0.611f, 0.603f, 0.588f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.specular"), 0.2f, 0.2f, 0.2f);
+		glUniform3f(glGetUniformLocation(animShader.Program, "light.direction"), -0.4f, -0.7f, -0.8f);
+<<<<<<< HEAD
+		glUniform3f(glGetUniformLocation(animShader.Program, "viewPos"),
+			camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
+=======
+
+>>>>>>> 6cdf3ced09fb31aa37645b6920223cab861b85ba
+		view = camera.GetViewMatrix();
+
 		modelLoc = glGetUniformLocation(animShader.Program, "model");
 		viewLoc = glGetUniformLocation(animShader.Program, "view");
 		projLoc = glGetUniformLocation(animShader.Program, "projection");
@@ -1149,15 +1178,6 @@ int main()
 		glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(projection));
 
-		glUniform3f(glGetUniformLocation(animShader.Program, "material.specular"), 0.2f, 0.2f, 0.2f);
-		glUniform1f(glGetUniformLocation(animShader.Program, "material.shininess"), 32.0f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.ambient"), 0.611f, 0.603f, 0.588f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.diffuse"), 0.611f, 0.603f, 0.588f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.specular"), 0.2f, 0.2f, 0.2f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "light.direction"), -0.4f, -0.7f, -0.8f);
-		glUniform3f(glGetUniformLocation(animShader.Program, "viewPos"),
-			camera.GetPosition().x, camera.GetPosition().y, camera.GetPosition().z);
-		view = camera.GetViewMatrix();
 		glBindVertexArray(VAO);
 
 		model = glm::mat4(1);
@@ -1165,7 +1185,6 @@ int main()
 		model = glm::scale(model, glm::vec3(0.0135f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		femaleNurse.Draw(animShader);
-		glBindVertexArray(0);
 
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(-5.7f, 0.0f, 96.6f));
@@ -1173,13 +1192,13 @@ int main()
 		model = glm::scale(model, glm::vec3(0.0135f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		maleNurse.Draw(animShader);
-		glBindVertexArray(0);
 
 		model = glm::mat4(1);
 		model = glm::translate(model, glm::vec3(0.329385f, 0.05f, 87.5523f));
 		model = glm::scale(model, glm::vec3(0.0155f));	// it's a bit too big for our scene, so scale it down
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 		pacient.Draw(animShader);
+
 		glBindVertexArray(0);
 
 		// Draw skybox as last
@@ -1361,34 +1380,38 @@ void DoMovement()
 		fast = 3.0f;
 		fastFlag = true;
 	}
+	else
+	{
+		fastFlag = false;
+	}
 
 	// Camera controls
-	if (keys[GLFW_KEY_W] || keys[GLFW_KEY_UP])
+	if ((keys[GLFW_KEY_W] || keys[GLFW_KEY_UP]) && freeCam )
 	{
 		camera.ProcessKeyboard(FORWARD, deltaTime, fast);
 	}
 
-	if (keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN])
+	if ((keys[GLFW_KEY_S] || keys[GLFW_KEY_DOWN]) && freeCam)
 	{
 		camera.ProcessKeyboard(BACKWARD, deltaTime, fast);
 	}
 
-	if (keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT])
+	if ((keys[GLFW_KEY_A] || keys[GLFW_KEY_LEFT]) && freeCam)
 	{
 		camera.ProcessKeyboard(LEFT, deltaTime, fast);
 	}
 
-	if (keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT])
+	if ((keys[GLFW_KEY_D] || keys[GLFW_KEY_RIGHT]) && freeCam)
 	{
 		camera.ProcessKeyboard(RIGHT, deltaTime, fast);
 	}
 
-	if (keys[GLFW_KEY_Q] || keys[GLFW_KEY_RIGHT])
+	if ((keys[GLFW_KEY_Q] || keys[GLFW_KEY_RIGHT]) && freeCam)
 	{
 		camera.ProcessKeyboard(UP, deltaTime, fast);
 	}
 
-	if (keys[GLFW_KEY_E] || keys[GLFW_KEY_RIGHT])
+	if ((keys[GLFW_KEY_E] || keys[GLFW_KEY_RIGHT]) && freeCam)
 	{
 		camera.ProcessKeyboard(DOWN, deltaTime, fast);
 	}
@@ -1397,6 +1420,18 @@ void DoMovement()
 // Is called whenever a key is pressed/released via GLFW
 void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode)
 {
+	if (keys[GLFW_KEY_M])
+	{
+		freeCam = true;
+		staticCam = false;
+	}
+
+	if (keys[GLFW_KEY_N])
+	{
+		freeCam = false;
+		staticCam = true;
+	}
+
 	if (keys[GLFW_KEY_1])
 	{
 		trolleyCircuit = !trolleyCircuit;

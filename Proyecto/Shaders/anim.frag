@@ -52,6 +52,7 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     vec3 reflectDir = reflect( -lightDir, normal );
     float spec = pow( max( dot( viewDir, reflectDir ), 0.0 ), material.shininess );
     
+<<<<<<< HEAD
     // Combine results
     vec3 ambient = light.ambient * vec3(1.0,1.0,1.0);
     vec3 diffuse = light.diffuse * diff * vec3(1.0,1.0,1.0);
@@ -61,3 +62,15 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     result = vec3(texColor.xyz*result);
     return (result);
 }
+=======
+    // specular
+    vec3 viewDir = normalize(viewPos - FragPos);
+    vec3 reflectDir = reflect(-lightDir, norm);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
+    //vec3 specular = light.specular * spec * vec3(texture (material.specular, TexCoords));
+    vec3 specular = light.specular * (spec * material.specular); //(cuando material.specular es vec3)
+        
+    vec3 result = ambient + diffuse + specular;
+    FragColor = vec4(result, texture( texture_diffuse1, TexCoords ).a * alpha);
+}
+>>>>>>> 6cdf3ced09fb31aa37645b6920223cab861b85ba
