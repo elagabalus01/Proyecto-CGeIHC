@@ -127,6 +127,38 @@ public:
 
 	}
 
+	void SetPosition(glm::vec3 position, glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), GLfloat yaw = YAW, GLfloat pitch = PITCH)
+	{
+		this->position = position;
+		this->worldUp = up;
+		this->yaw = yaw;
+		this->pitch = pitch;
+		this->updateCameraVectors();
+	}
+
+	void SetDirection(GLfloat yaw, GLfloat pitch, GLboolean constrainPitch = true)
+	{
+		this->yaw += yaw;
+		this->pitch += pitch;
+
+		// Make sure that when pitch is out of bounds, screen doesn't get flipped
+		if (constrainPitch)
+		{
+			if (this->pitch > 89.0f)
+			{
+				this->pitch = 89.0f;
+			}
+
+			if (this->pitch < -89.0f)
+			{
+				this->pitch = -89.0f;
+			}
+		}
+
+		// Update Front, Right and Up Vectors using the updated Eular angles
+		this->updateCameraVectors();
+	}
+
 	GLfloat GetZoom()
 	{
 		return this->zoom;
